@@ -1,18 +1,21 @@
-#include<bits/stdc++.h>
-#define ll long long
-using namespace std;
-#define MOD 1000000007
-const int N = 1e6;
-#define MOD1 123456789
+#include <stdio.h>
 
+int freq[1005] = {0};
 
-void solve() {
-    
-}
 int main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-    int t = 1;
-    // cin >> t;
-    while (t--) solve();
+    int n, res = 10000, maxtanso = -1;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        int x;
+        scanf("%d", &x);
+        freq[x]++;
+        if (freq[x] > maxtanso) {
+            maxtanso = freq[x];
+            res = x;
+        } else if (freq[x] == maxtanso && x < res) {
+            res = x;
+        }
+    }
+    printf("%d\n", res);
+    return 0;
 }

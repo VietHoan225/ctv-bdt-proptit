@@ -1,23 +1,47 @@
-# SOLUTION PROBLEM 3: TỔNG LỚN NHẤT
+# SOLUTION PROBLEM 1: Xuất hiện nhiều nhất
 
-Đề bài: **[MAXSUM.md](../MAXSUM.md)**
-Code: **[SOL.cpp](SOL.cpp)**
+Đề bài: **[frequency.md](../frequency.md)**
+Code: **[sol.cpp](sol.cpp)**
 
 ---
 
-Đầu tiên, chúng ta cần giải quyết bài toán với $k = 1$ trước.
+**Giải thích:**  
+Số 1 và số 2 đều xuất hiện 2 lần. Vì số 1 nhỏ hơn số 2, nên in ra 1.
 
-Gọi $f(i, j)$ là tổng lớn nhất có thể tạo được nếu bắt buộc chọn phần tử $a_i$ và:
-- Số $b_1$ chưa được sử dụng (sau khi xét phần tử $i$) nếu $j = 0$.
-- Số $b_1$ sẽ được sử dụng cho phần tử $a_{i + 1}$ nếu $j = 1$.
-- Số $b_1$ đã được sử dụng trước đó (và sẽ không được sử dụng nữa) nếu $j = 2$.
+---
 
-$f(i, j)$ sẽ là $\max$ của các trường hợp sau:
-- $\max (0, f(i - 1, j)) + a_i \times mul_j$, với $mul_j = b_1$ nếu $j = 1$, ngược lại $mul_j = 1$: chọn phần tử $a_i$ với đúng "mask" là $j$.
-- $\max (f(i, k))$ với $0 \le k < j$: phần tử $a_i$ đã được chọn với một "mask" khác - việc chuyển "mask" là để chuẩn bị cho phần tử $a_{i + 1}$.
+## Giải thuật
 
-Lưu ý rằng, chúng ta chỉ quan tâm việc thực hiện phép nhân nếu đoạn mà nó thực hiện nằm trong phần tổng lớn nhất (mà chúng ta sẽ chọn cuối cùng). Những phép nhân phía ngoài sẽ không ảnh hưởng đến tổng cuối cùng nên chúng ta không cần thiết phải quan tâm.
+1. **Khởi tạo mảng đếm tần suất** `freq[0..1000] = 0`.  
+2. **Duyệt từng phần tử `x` trong mảng:**  
+   - Tăng `freq[x]++`  
+   - Nếu `freq[x] > maxtanso`, cập nhật `maxtanso = freq[x]` và `res = x`  
+   - Nếu `freq[x] == maxtanso` và `x < res`, cập nhật `res = x`  
+3. **In kết quả** `res`.
 
-Từ $k = 1$, không khó để chuyển bài toán thành $k \le 6$, chỉ đơn giản là $j$ là một số trong đoạn $[0, 3^k - 1]$ và được viết trong hệ tam phân.
+---
 
-Độ phức tạp: $O(n \times 3^k \times k)$.
+## Code C mẫu
+
+```c
+#include <stdio.h>
+
+int freq[1005] = {0};
+
+int main() {
+    int n, res = 10000, maxtanso = -1;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        int x;
+        scanf("%d", &x);
+        freq[x]++;
+        if (freq[x] > maxtanso) {
+            maxtanso = freq[x];
+            res = x;
+        } else if (freq[x] == maxtanso && x < res) {
+            res = x;
+        }
+    }
+    printf("%d\n", res);
+    return 0;
+}
